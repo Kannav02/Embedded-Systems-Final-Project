@@ -11,8 +11,16 @@ def get_activity_data():
     cursor.execute("SELECT timestamp FROM user_activity")
     data = cursor.fetchall()
     conn.close()
-    timestamps = [datetime.strptime(record[0], '%Y-%m-%d %H:%M:%S') for record in data]
+    timestamps = []
+    for record in data:
+        try:
+            clean_timestamp = record[0].strip().rstrip(')')  # Remove whitespace and trailing )
+            timestamp = datetime.strptime(clean_timestamp, '%Y-%m-%d %H:%M:%S')
+            timestamps.append(timestamp)
+        except ValueError as e:
+            print(f"Error parsing '{record[0]}': {e}")
     return timestamps
+
 
 fig, ax = plt.subplots()
 

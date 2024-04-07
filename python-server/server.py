@@ -11,10 +11,11 @@ DATABASE_NAME = 'User.db'
 def validate_user(uid):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    cursor.execute("SELECT UID FROM user_info WHERE UID = ?", (uid,))
+    cursor.execute("SELECT first_name FROM user_info WHERE UID = ?", (uid,))
     result = cursor.fetchone()
     conn.close()
-    return result is not None
+    return result[0] if result else None
+
 
 def select_activity():
     conn=sqlite3.connect(DATABASE_NAME)
@@ -61,21 +62,19 @@ def start_server(host='0.0.0.0', port=8080):
         client_socket, address = server_socket.accept()
         print(f"Connection from {address} has been established.")
         
-        # Receive data from ESP32
         received_data = client_socket.recv(1024).decode('utf-8', errors='replace')
         print(f"Received data: {received_data}")
-
 
         try:
             uid, timestamp_str = received_data.strip("()").split(',')
             print(f"UID: {uid}, Timestamp: {timestamp_str}")
             
-            if validate_user(uid):
-
-                print(f"Valid UID: {uid}. Adding activity.")
+            user_name = validate_user(uid)
+            if user_name:
+                print(f"Valid user: {user_name}. Adding activity.")
                 add_activity(uid, timestamp_str)
                 
-                client_socket.sendall(b'A')
+                client_socket.sendall(f'A, {user_name}'.encode('utf-8'))
             else:
                 print(f"Invalid UID: {uid}.")
                 client_socket.sendall(b'N')
@@ -87,5 +86,6 @@ def start_server(host='0.0.0.0', port=8080):
         finally:
             client_socket.close()
 
+
 if __name__ == "__main__":
-    select_activity()
+    start_server()
