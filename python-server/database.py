@@ -5,14 +5,13 @@ def create_tables():
     conn = sqlite3.connect('User.db')
     cursor = conn.cursor()
 
-    # Create user_info table
     create_table_user_info_sql = '''CREATE TABLE IF NOT EXISTS user_info (
                                 UID TEXT PRIMARY KEY,
                                 first_name TEXT NOT NULL,
                                 last_name TEXT NOT NULL)'''
     cursor.execute(create_table_user_info_sql)
 
-    # Create user_activity table
+   
     create_table_user_activity_sql = '''CREATE TABLE IF NOT EXISTS user_activity (
                                     activity_id INTEGER PRIMARY KEY AUTOINCREMENT,
                                     UID TEXT NOT NULL,
@@ -42,5 +41,4 @@ def insert_user(uid, first_name, last_name):
 if __name__ == "__main__":
     create_tables()
 
-    # Insert some example users into the user_info table
     insert_user("83128CFB", "Oliver", "Moore")

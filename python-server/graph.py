@@ -14,7 +14,7 @@ def get_activity_data():
     timestamps = []
     for record in data:
         try:
-            clean_timestamp = record[0].strip().rstrip(')')  # Remove whitespace and trailing )
+            clean_timestamp = record[0].strip().rstrip(')') 
             timestamp = datetime.strptime(clean_timestamp, '%Y-%m-%d %H:%M:%S')
             timestamps.append(timestamp)
         except ValueError as e:

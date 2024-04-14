@@ -1,14 +1,17 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 
-const char* ssid = "Kinza";
-const char* password = "6478768717";
-const char* host = "10.0.0.22"; // IP address of the server
+ const char* ssid = "Kinza125";
+ const char* password = "67361923763";
+ const char* host = "10.1.1.28"; // IP address of the server
+
+
 const uint16_t port = 8080;
 
 WiFiClient client;
 
 void connect_to_wifi(){
+
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -16,9 +19,7 @@ void connect_to_wifi(){
   }
   Serial.println("Connected to WiFi");
 }
-void connect_to_server(){
 
-}
 void clearSerialBuffer() {
     char dummy;
     while (Serial2.available()) {
@@ -66,7 +67,7 @@ void loop() {
         Serial.println(serverResponse);
 
 
-        Serial2.print(serverResponse);
+        Serial2.println(serverResponse);
         
         client.stop(); 
       } 
@@ -75,6 +76,5 @@ void loop() {
       }
     }
   }
-  delay(1000);  // Prevent flooding
-}
+  delay(1000); 
 
